@@ -6,8 +6,10 @@ const formatJob = (job) => {
     location: job.location,
     description: job.description,
     created_at: job.created_at,
-    clientNumber: job.clientNumber,
+    clientPhoneNumber: job.clientPhoneNumber,
     jobStatus: job.jobStatus,
+    userId: job.createdBy,
+    jobDate: job.jobDate,
     
   };
 }

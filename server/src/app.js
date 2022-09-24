@@ -8,8 +8,8 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 const acceptedJobStatuses = [
   "Pending",
@@ -37,20 +37,25 @@ app.post(
       created_at: Joi.date(),
       clientPhoneNumber: Joi.number().required(),
       jobStatus: Joi.string().required(),
-      jobNotes: Joi.array().items(Joi.string()),
+      jobNotes: Joi.string().required(),
       jobDate: Joi.date().required(),
     }),
   }),
   async (req, res, next) => {
     const { body } = req;
+    const jobStatus = req.body.jobStatus;
     const jobBody = {
       userId: req.auth.payload.sub,
       ...body,
     };
     try {
-      const job = await JobModel(jobBody);
-      await job.save();
-      res.status(201).send(job);
+       if (acceptedJobStatuses.includes(jobStatus)) {
+        const job = await JobModel.create(jobBody);
+        res.send(formatJob(job)).status(201);
+       } else {
+        res.status(400).send("Invalid job status");
+       }
+      
     } catch (error) {
       next(error);
     }
@@ -59,7 +64,7 @@ app.post(
 
 //
 //
-app.patch("/jobs/:id", async (request, response, next) => {
+app.patch("/jobs/:id", checkJwt, async (request, response, next) => {
   try {
     const { id } = request.params;
     const updates = request.body;
@@ -74,32 +79,50 @@ app.patch("/jobs/:id", async (request, response, next) => {
 //
 //
 
-app.get("/jobs", async (req, res) => {
+app.get("/jobs", async (req, res, next) => {
+
   try {
     const jobs = await JobModel.find({});
-    res.send(formatJob(jobs)).status(200);
+    res.send(jobs.map(formatJob)).status(200);
   } catch (error) {
     next(error);
   }
 });
 
-app.get("/jobs/:id", async (req, res, next) => {
+app.get("/jobs/:id", checkJwt, async (req, res, next) => {
   const { id } = req.params;
+  
+  console.log(id);
+  const user = req.auth.payload.sub
+  console.log(user);
+
   try {
     if (mongoose.Types.ObjectId.isValid(id) === true) {
       const job = await JobModel.findById(id);
+      console.log(job);
       if (job !== null) {
-        res.send(formatJob(job)).status(200);
+        if (!job.userId) {
+          return res.status(401).json({error: "Unauthorized"});
+        }
+
+        if (job.userId === user) {
+          return res.send(formatJob(job)).status(200);
+        } else {
+          return res.status(403).json({error: "You are not authorized to view this job"});
+        }
+
       } else {
-        res.send("Job not found").status(404);
+        return res.status(404).json({error: "Job not found"});
       }
     } else {
-      res.send("Invalid ID").status(400);
+      return res.status(400).json({error: "Invalid ID"});
     }
   } catch (error) {
     next(error);
   }
 });
+
+
 
 app.use(errors());
 module.exports = app;

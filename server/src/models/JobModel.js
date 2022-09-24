@@ -9,7 +9,7 @@ const JobSchema = new Schema({
   created_at: {type:Date},
   clientPhoneNumber: {type:String, required: true},
   jobStatus: {type:String, required: true},
-  createdBy: {type: String, required:true},
+  userId: {type: String, required: true},
   jobNotes: {type: Array, required: false},
   jobDate: {type: Date, required: true},
 });
