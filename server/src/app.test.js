@@ -77,7 +77,7 @@ describe('GET /jobs', () => {
       .get('/jobs')
       .expect(expectedStatus)
       .expect((res) => {
-        expect(res.body).toEqual(expectedBody);
+        expect(res.body).toContain(expectedBody);
       });
   });
 });

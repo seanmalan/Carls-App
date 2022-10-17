@@ -7,8 +7,10 @@ const job = {
   location: "location",
   description: "description",
   created_at: "created_at",
-  clientNumber: "clientNumber",
+  clientPhoneNumber: "clientPhoneNumber",
   jobStatus: "jobStatus",
+  jobDate: "jobDate",
+  userId: "userId",
 };
 
 describe("formatJob", () => {
@@ -21,8 +23,10 @@ describe("formatJob", () => {
       location: "location",
       description: "description",
       created_at: "created_at",
-      clientNumber: "clientNumber",
+      clientPhoneNumber: "clientPhoneNumber",
       jobStatus: "jobStatus",
+      jobDate: "jobDate",
+      userId: "userId",
     });
   });
 });

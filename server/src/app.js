@@ -39,6 +39,7 @@ app.post(
       jobStatus: Joi.string().required(),
       jobNotes: Joi.string().required(),
       jobDate: Joi.date().required(),
+      userId: Joi.string(),
     }),
   }),
   async (req, res, next) => {
