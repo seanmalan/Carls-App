@@ -1,17 +1,17 @@
 const { Pool } = require("pg");
-const types = require("pg").types;
-// pg won't cast by default as may lose precision.
-types.setTypeParser(1700, function (val) {
-  return parseFloat(val);
-});
-
+const database = process.env.PGDATABASE
+const password = process.env.PGPASSWORD
+const user = process.env.PGUSER
+const host = process.env.PGHOST
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL
-    ? {
-        rejectUnauthorized: false,
-      }
-    : false,
+  host: host,
+  user: user,
+  password: password,
+  database: database,
+  port: "5432",
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 module.exports = {
@@ -22,3 +22,7 @@ module.exports = {
     pool.end();
   },
 };
+
+
+
+// check the way katrina showed you with doing the rest file in vscode and then itll run the get request from inside vscode

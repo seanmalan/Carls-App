@@ -1,9 +1,8 @@
 const db = require("./db");
 const express = require("express");
-const JobModel = require("./models/JobModel");
-const { formatJob } = require("./format");
-const { celebrate, Joi, errors, Segments } = require("celebrate");
-const { auth } = require("express-oauth2-jwt-bearer");
+// const { formatJob } = require("./format");
+// const { celebrate, Joi, errors, Segments } = require("celebrate");
+// const { auth } = require("express-oauth2-jwt-bearer");
 const cors = require("cors");
 
 const app = express();
@@ -19,6 +18,8 @@ const acceptedJobStatuses = [
   "Cancelled",
   "To Price",
 ];
+
+
 
 // const checkJwt = auth({
 //   audience: "https://strongfencing.com",
@@ -129,5 +130,5 @@ app.get("/jobs", async (req, res, next) => {
 
 
 
-app.use(errors());
+// app.use(errors());
 module.exports = app;
