@@ -23,7 +23,6 @@
   },
   "_requiredBy": [
     "/@babel/core",
-    "/@emotion/babel-plugin",
     "/@jest/transform",
     "/v8-to-istanbul"
   ],
