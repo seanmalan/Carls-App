@@ -1,0 +1,2 @@
+INSERT INTO customerInfo (firstName, lastName, phoneNumber, email, address, userId) VALUES ('John', 'Smith', '123456789','johnsmith@gmail.com', '123 Fake Street', 1),
+('Joe', 'Blogg', '021345456', 'joeblogg@hotmail.com', '123 Fake Street', 2);
